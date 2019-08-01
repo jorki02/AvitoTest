@@ -18,7 +18,7 @@ public class Message {
     @JoinColumn (name="author",referencedColumnName="id")
     private ChatUser author;
 
-    @Column
+    @Column(length = 10000)
     private String text;
 
     @Column

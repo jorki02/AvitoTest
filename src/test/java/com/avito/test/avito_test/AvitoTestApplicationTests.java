@@ -57,6 +57,42 @@ public class AvitoTestApplicationTests {
 	}
 
 	@Test
+	public void addLargeMessageTest() {
+		Integer id1 = chatService.addNewUser("Sasha");
+		Integer id2 = chatService.addNewUser("Masha");
+
+		List<Integer> ids = new ArrayList<>();
+		ids.add(id1);
+		ids.add(id2);
+		Integer idChat = chatService.addNewChat("Chat", ids);
+
+		Integer messageId = chatService.addMessage(idChat, id1, "Hello WorldHello WorldHello WorldHello Wor" +
+				"ldHello WorldHello WorldHello WorldHello WorldHello World Hello WorldHello WorldHello WorldHello Wor" +
+				"Hello WorldHello WorldHello WorldHello WorHello WorldHello WorldHello WorldHello Wor" +
+				"Hello WorldHello WorldHello WorldHello WorHello WorldHello WorldHello WorldHello Wor" +
+				"Hello WorldHello WorldHello WorldHello WorHello WorldHello WorldHello WorldHello Wor" +
+				"Hello WorldHello WorldHello WorldHello Wor" +
+				"Hello WorldHello WorldHello WorldHello Wor" +
+				"Hello WorldHello WorldHello WorldHello Wor" +
+				"Hello WorldHello WorldHello WorldHello Wor" +
+				"Hello WorldHello WorldHello WorldHello Wor" +
+				"Hello WorldHello WorldHello WorldHello Wor" +
+				"Hello WorldHello WorldHello WorldHello Wor" +
+				"Hello WorldHello WorldHello WorldHello Wor" +
+				"Hello WorldHello WorldHello WorldHello Wor" +
+				"Hello WorldHello WorldHello WorldHello Wor" +
+				"Hello WorldHello WorldHello WorldHello Wor" +
+				"Hello WorldHello WorldHello WorldHello Wor" +
+				"Hello WorldHello WorldHello WorldHello Wor" +
+				"Hello WorldHello WorldHello WorldHello Wor" +
+				"Hello WorldHello WorldHello WorldHello Wor" +
+				"Hello WorldHello WorldHello WorldHello Wor" +
+				"Hello WorldHello WorldHello WorldHello Wor");
+
+		System.out.println(messageId);
+	}
+
+	@Test
 	public void getChatsTest() {
 		Integer id1 = chatService.addNewUser("Sasha");
 		Integer id2 = chatService.addNewUser("Masha");

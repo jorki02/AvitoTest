@@ -1,7 +1,9 @@
 # AvitoTest
-Для запуска потребуется postgres с пользователем:
+Для запуска потребуется postgres с настройками:
 
-username=postrges
+url=jdbc:postgresql://localhost:5432/postgres
+
+user=postgres
 
 password=root
 

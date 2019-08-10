@@ -5,31 +5,53 @@ import com.avito.test.avito_test.service.dto.ChatDto;
 import com.avito.test.avito_test.service.dto.MessageDto;
 import com.avito.test.avito_test.storage.entities.Chat;
 import com.avito.test.avito_test.storage.entities.ChatUser;
+import com.avito.test.avito_test.storage.repos.ChatRepo;
+import com.avito.test.avito_test.storage.repos.ChatUserRepo;
+import com.avito.test.avito_test.storage.repos.MessageRepo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+
 @RunWith(SpringRunner.class)
+@TestPropertySource(locations = "classpath:database-test.properties")
 @SpringBootTest
 public class AvitoTestApplicationTests {
 
 	@Autowired
 	ChatService chatService;
 
+	@Autowired
+	ChatUserRepo chatUserRepo;
+
+	@Autowired
+	ChatRepo chatRepo;
+
+	@Autowired
+	MessageRepo messageRepo;
+
 	@Test
 	public void addUserTest() {
+		Long countUsers = chatUserRepo.count();
+
 		chatService.addNewUser("Sasha");
 		chatService.addNewUser("Masha");
+
+		assertEquals(countUsers + 2, chatUserRepo.count());
 	}
 
 
 	@Test
 	public void addChatTest() {
+		Long countChats = chatRepo.count();
+
 		Integer id1 = chatService.addNewUser("Sasha");
 		Integer id2 = chatService.addNewUser("Masha");
 
@@ -38,11 +60,13 @@ public class AvitoTestApplicationTests {
 		ids.add(id2);
 		Integer idChat = chatService.addNewChat("Chat", ids);
 
-		System.out.println(idChat);
+		assertEquals(countChats + 1, chatRepo.count());
 	}
 
 	@Test
 	public void addMessageTest() {
+		Long messageCount = messageRepo.count();
+
 		Integer id1 = chatService.addNewUser("Sasha");
 		Integer id2 = chatService.addNewUser("Masha");
 
@@ -53,11 +77,13 @@ public class AvitoTestApplicationTests {
 
 		Integer messageId = chatService.addMessage(idChat, id1, "Hello World");
 
-		System.out.println(messageId);
+		assertEquals(messageCount + 1, messageRepo.count());
 	}
 
 	@Test
 	public void addLargeMessageTest() {
+		Long messageCount = messageRepo.count();
+
 		Integer id1 = chatService.addNewUser("Sasha");
 		Integer id2 = chatService.addNewUser("Masha");
 
@@ -89,7 +115,7 @@ public class AvitoTestApplicationTests {
 				"Hello WorldHello WorldHello WorldHello Wor" +
 				"Hello WorldHello WorldHello WorldHello Wor");
 
-		System.out.println(messageId);
+		assertEquals(messageCount + 1, messageRepo.count());
 	}
 
 	@Test

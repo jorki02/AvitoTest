@@ -1,0 +1,22 @@
+version: '2'
+services:
+  db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_PASSWORD=root
+    restart: always
+    volumes:
+      - ./docker/database:/var/lib/postgresql/data
+  smlr:
+    image:
+      jorki02/avito_task:latest
+    restart: always
+    links:
+      - db
+    ports:
+      - 9000:8080
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SERVER_PORT=8080

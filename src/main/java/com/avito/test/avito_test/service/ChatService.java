@@ -37,8 +37,6 @@ public class ChatService {
     @Autowired
     ModelMapper modelMapper;
 
-    final private ConcurrentMap<Integer, Lock> lockConcurrentMap = new ConcurrentHashMap<>();
-
     public Integer addNewUser(String username){
         ChatUser chatUser = new ChatUser();
         chatUser.setUsername(username);
@@ -70,12 +68,6 @@ public class ChatService {
     }
 
     public Integer addMessage(Integer chatId, Integer userId, String text){
-        Lock lock;
-        synchronized (lockConcurrentMap) {
-            lock = lockConcurrentMap.getOrDefault(chatId, new ReentrantLock());
-            lockConcurrentMap.putIfAbsent(chatId, lock);
-        }
-        lock.lock();
         Message message = new Message();
         message.setText(text);
         message.setCreatedAt(new Date());
@@ -93,8 +85,6 @@ public class ChatService {
         }
 
         message = messageRepo.save(message);
-
-        lock.unlock();
 
         return message.getId();
     }

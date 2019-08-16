@@ -3,6 +3,7 @@ package com.avito.test.avito_test.controller;
 import com.avito.test.avito_test.controller.request_entities.*;
 import com.avito.test.avito_test.controller.response_entities.ListChats;
 import com.avito.test.avito_test.controller.response_entities.ListMessages;
+import com.avito.test.avito_test.service.ChatLockServiceProxy;
 import com.avito.test.avito_test.service.ChatService;
 import com.avito.test.avito_test.service.dto.ChatDto;
 import com.avito.test.avito_test.service.dto.MessageDto;
@@ -24,6 +25,9 @@ public class ChatController {
     @Autowired
     ChatService chatService;
 
+    @Autowired
+    ChatLockServiceProxy chatLockServiceProxy;
+
     @RequestMapping(value = "/users/add", method = RequestMethod.POST)
     public ResponseEntity<Integer> addUser(@RequestBody AddUser addUser) {
         Integer userId = chatService.addNewUser(addUser.getUsername());
@@ -38,7 +42,7 @@ public class ChatController {
 
     @RequestMapping(value = "/messages/add", method = RequestMethod.POST)
     public ResponseEntity<Integer> addUser(@RequestBody AddMessage addMessage) {
-        Integer messageId = chatService.addMessage(addMessage.getChat(), addMessage.getAuthor(), addMessage.getText());
+        Integer messageId = chatLockServiceProxy.addMessage(addMessage.getChat(), addMessage.getAuthor(), addMessage.getText());
         return new ResponseEntity<>(messageId, HttpStatus.OK);
     }
 

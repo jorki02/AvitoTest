@@ -8,7 +8,7 @@ import java.util.List;
 public class ListMessages {
 
     private List<MessageDto> messages;
-    private Long count;
+    private Integer count;
 
     public List<MessageDto> getMessages() {
         return messages;
@@ -18,11 +18,11 @@ public class ListMessages {
         this.messages = messages;
     }
 
-    public Long getCount() {
+    public Integer getCount() {
         return count;
     }
 
-    public void setCount(Long count) {
+    public void setCount(Integer count) {
         this.count = count;
     }
 }

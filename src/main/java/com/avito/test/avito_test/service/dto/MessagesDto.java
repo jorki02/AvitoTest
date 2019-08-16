@@ -5,9 +5,9 @@ import java.util.List;
 public class MessagesDto {
     private List<MessageDto> messages;
 
-    private Long count;
+    private Integer count;
 
-    public MessagesDto(List<MessageDto> messages, Long count) {
+    public MessagesDto(List<MessageDto> messages, Integer count) {
         this.messages = messages;
         this.count = count;
     }
@@ -20,11 +20,11 @@ public class MessagesDto {
         this.messages = messages;
     }
 
-    public Long getCount() {
+    public Integer getCount() {
         return count;
     }
 
-    public void setCount(Long count) {
+    public void setCount(Integer count) {
         this.count = count;
     }
 }

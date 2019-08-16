@@ -13,6 +13,9 @@ public class Chat {
     private Integer id;
 
     @Column
+    private Integer count = 0;
+
+    @Column
     private String name;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -33,6 +36,14 @@ public class Chat {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
     }
 
     public String getName() {

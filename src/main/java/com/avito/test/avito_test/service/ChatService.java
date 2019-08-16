@@ -76,6 +76,7 @@ public class ChatService {
         Optional<Chat> chatById = chatRepo.findById(chatId);
         if(chatById.isPresent()){
             Chat chat = chatById.get();
+            chat.setCount(chat.getCount() + 1);
             message.setChat(chat);
         }
 
@@ -107,7 +108,9 @@ public class ChatService {
         Optional<Chat> chat = chatRepo.findById(chatId);
 
         Page<Message> messageEntities;
+        Integer count;
         if(chat.isPresent()){
+            count = chat.get().getCount();
             messageEntities = messageRepo.findAllByChatOrderByCreatedAt(chat.get(), pageable);
         } else {
             throw new RuntimeException("Chat with given id doesn't exists");
@@ -121,7 +124,7 @@ public class ChatService {
             messageDtos.add(messageDto);
         }
 
-        return new MessagesDto(messageDtos, messageEntities.getTotalElements());
+        return new MessagesDto(messageDtos, count);
     }
 
 }

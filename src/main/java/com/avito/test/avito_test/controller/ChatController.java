@@ -6,6 +6,7 @@ import com.avito.test.avito_test.controller.response_entities.ListMessages;
 import com.avito.test.avito_test.service.ChatService;
 import com.avito.test.avito_test.service.dto.ChatDto;
 import com.avito.test.avito_test.service.dto.MessageDto;
+import com.avito.test.avito_test.service.dto.MessagesDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,9 +52,11 @@ public class ChatController {
 
     @RequestMapping(value = "/messages/get", method = RequestMethod.POST)
     public ResponseEntity<ListMessages> addUser(@RequestBody GetMessages getMessages) {
-        List<MessageDto> messageDtoList = chatService.getMessages(getMessages.getChat());
+        MessagesDto messageDtoList = chatService.getMessages(getMessages.getChat(),
+                getMessages.getPageNumber(), getMessages.getPageSize());
         ListMessages listMessages = new ListMessages();
-        listMessages.setMessages(messageDtoList);
+        listMessages.setMessages(messageDtoList.getMessages());
+        listMessages.setCount(messageDtoList.getCount());
         return new ResponseEntity<>(listMessages, HttpStatus.OK);
     }
 

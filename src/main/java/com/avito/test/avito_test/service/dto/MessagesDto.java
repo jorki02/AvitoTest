@@ -1,14 +1,16 @@
-package com.avito.test.avito_test.controller.response_entities;
-
-import com.avito.test.avito_test.service.dto.MessageDto;
-import com.avito.test.avito_test.storage.entities.Message;
+package com.avito.test.avito_test.service.dto;
 
 import java.util.List;
 
-public class ListMessages {
-
+public class MessagesDto {
     private List<MessageDto> messages;
+
     private Long count;
+
+    public MessagesDto(List<MessageDto> messages, Long count) {
+        this.messages = messages;
+        this.count = count;
+    }
 
     public List<MessageDto> getMessages() {
         return messages;

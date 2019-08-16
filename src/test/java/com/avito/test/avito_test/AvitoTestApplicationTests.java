@@ -3,6 +3,7 @@ package com.avito.test.avito_test;
 import com.avito.test.avito_test.service.ChatService;
 import com.avito.test.avito_test.service.dto.ChatDto;
 import com.avito.test.avito_test.service.dto.MessageDto;
+import com.avito.test.avito_test.service.dto.MessagesDto;
 import com.avito.test.avito_test.storage.entities.Chat;
 import com.avito.test.avito_test.storage.entities.ChatUser;
 import com.avito.test.avito_test.storage.repos.ChatRepo;
@@ -214,13 +215,13 @@ public class AvitoTestApplicationTests {
 		chatService.addMessage(idChat1, id1, "Hello World");
 
 
-		List<MessageDto> chats = chatService.getMessages(idChat1);
+		MessagesDto chats = chatService.getMessages(idChat1, 0, 5);
 
-		for(MessageDto messageDto : chats){
+		for(MessageDto messageDto : chats.getMessages()){
 			System.out.println(messageDto.getText());
 		}
 
-		System.out.println(k);
+		System.out.println(chats.getCount());
 
 	}
 

@@ -3,6 +3,7 @@ package com.avito.test.avito_test.service;
 
 import com.avito.test.avito_test.service.dto.ChatDto;
 import com.avito.test.avito_test.service.dto.MessageDto;
+import com.avito.test.avito_test.service.dto.MessagesDto;
 import com.avito.test.avito_test.storage.entities.Chat;
 import com.avito.test.avito_test.storage.entities.ChatUser;
 import com.avito.test.avito_test.storage.entities.Message;
@@ -11,6 +12,9 @@ import com.avito.test.avito_test.storage.repos.ChatUserRepo;
 import com.avito.test.avito_test.storage.repos.MessageRepo;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,7 +63,7 @@ public class ChatService {
         return chat.getId();
     }
 
-    public Integer addMessage(Integer chatId, Integer userId, String text){
+    public synchronized Integer addMessage(Integer chatId, Integer userId, String text){
         Message message = new Message();
         message.setText(text);
         message.setCreatedAt(new Date());
@@ -97,12 +101,14 @@ public class ChatService {
         return chatDtos;
     }
 
-    public List<MessageDto> getMessages(Integer chatId){
+    public MessagesDto getMessages(Integer chatId, Integer pageNumber, Integer pageSize){
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+
         Optional<Chat> chat = chatRepo.findById(chatId);
 
-        Collection<Message> messageEntities;
+        Page<Message> messageEntities;
         if(chat.isPresent()){
-            messageEntities = messageRepo.findAllByChatOrderByCreatedAt(chat.get());
+            messageEntities = messageRepo.findAllByChatOrderByCreatedAt(chat.get(), pageable);
         } else {
             throw new RuntimeException("Chat with given id doesn't exists");
         }
@@ -115,7 +121,7 @@ public class ChatService {
             messageDtos.add(messageDto);
         }
 
-        return messageDtos;
+        return new MessagesDto(messageDtos, messageEntities.getTotalElements());
     }
 
 }

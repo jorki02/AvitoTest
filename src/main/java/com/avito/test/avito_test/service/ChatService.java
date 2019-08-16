@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -36,7 +37,7 @@ public class ChatService {
     @Autowired
     ModelMapper modelMapper;
 
-    ConcurrentMap<Integer, Lock> lockConcurrentMap;
+    final private ConcurrentMap<Integer, Lock> lockConcurrentMap = new ConcurrentHashMap<>();
 
     public Integer addNewUser(String username){
         ChatUser chatUser = new ChatUser();

@@ -19,6 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Transactional
 @Service
@@ -32,6 +35,8 @@ public class ChatService {
     MessageRepo messageRepo;
     @Autowired
     ModelMapper modelMapper;
+
+    ConcurrentMap<Integer, Lock> lockConcurrentMap;
 
     public Integer addNewUser(String username){
         ChatUser chatUser = new ChatUser();
@@ -63,7 +68,13 @@ public class ChatService {
         return chat.getId();
     }
 
-    public synchronized Integer addMessage(Integer chatId, Integer userId, String text){
+    public Integer addMessage(Integer chatId, Integer userId, String text){
+        Lock lock;
+        synchronized (lockConcurrentMap) {
+            lock = lockConcurrentMap.getOrDefault(chatId, new ReentrantLock());
+            lockConcurrentMap.putIfAbsent(chatId, lock);
+        }
+        lock.lock();
         Message message = new Message();
         message.setText(text);
         message.setCreatedAt(new Date());
@@ -81,6 +92,8 @@ public class ChatService {
         }
 
         message = messageRepo.save(message);
+
+        lock.unlock();
 
         return message.getId();
     }
